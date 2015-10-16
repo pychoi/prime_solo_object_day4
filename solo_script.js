@@ -44,33 +44,40 @@ position = document.getElementById('content');
 //Loop the array, extracting each array and writing information to the DOM
 //Note that the information is not 'clean'
 for(var i = 0; i < array.length; i++){
-	array[i] = calculateSTI(array[i]);  
+	array[i] = calculateSTI(array[i]); 
  	newEl = document.createElement('li');
   newEl.style.listStyle = 'none';  
-	newText = document.createTextNode(array[i].join(", "));  
+	newText = document.createTextNode([array[i].name, array[i].bonusStiPercent, array[i].adjSalary, array[i].bonusAmount].join(', '));  
 	newEl.appendChild(newText);
 	position.appendChild(newEl);
 }
 
 function calculateSTI(object){
-  var newArray = [];
+  //var newArray = [];
+  var newObject = new Object();
 
-  newArray[0] = object.name;
+  //newArray[0] = object.name;
+  newObject.name = object.name;
 
   var employeeNumber = object.employeeNumber;
   var baseSalary = object.baseSalary;
   var reviewScore = object.reviewScore;
 
-  var bonus = getBaseSTI(reviewScore) + getYearAdjustment(employeeNumber) - getIncomeAdjustment(baseSalary);
+  var bonus = getBaseSTI(object.reviewScore) + getYearAdjustment(object.employeeNumber) - getIncomeAdjustment(object.baseSalary);
   if(bonus > 0.13){
     bonus = 0.13;
   }
 
-  newArray[1] = bonus;
-  newArray[2] = Math.round(baseSalary * (1.0 + bonus));  
-  newArray[3] = baseSalary * bonus;
-  console.log(newArray[0] + " " + newArray[1] + " " + newArray[2] + " " + newArray[3]);
-  return newArray;  
+  //newArray[1] = bonus;
+  newObject.bonusStiPercent = bonus;
+  //newArray[2] = Math.round(baseSalary * (1.0 + bonus));
+  newObject.adjSalary = Math.round(baseSalary * (1.0 + bonus));  
+  //newArray[3] = baseSalary * bonus;
+  newObject.bonusAmount = baseSalary * bonus;
+  
+  //console.log(newObject);
+
+  return newObject;  
 }
 
 function getBaseSTI(reviewScore){
